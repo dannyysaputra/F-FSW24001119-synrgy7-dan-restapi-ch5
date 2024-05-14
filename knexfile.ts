@@ -11,8 +11,8 @@ const connection: Knex.ConnectionConfig = {
 };
 
 const commonConfig: Knex.Config = {
-    client: 'mysql',
-    connection,
+    client: 'pg',
+    connection, 
     pool: {
         min: 2,
         max: 10,
