@@ -10,9 +10,7 @@ export type CarType = {
 export class CarModel extends Model {
     static tableName = 'cars';
 
-    public static async create<Payload>(data: Payload): Promise<CarType & DateType> {
-        return super.insert<Payload, CarType>({
-            ...data,
-        })  
+    public static async create<Payload>(data: Payload & { image: string }): Promise<CarType & DateType> {
+        return super.insert<Payload, CarType>({...data})  
     }
 }
