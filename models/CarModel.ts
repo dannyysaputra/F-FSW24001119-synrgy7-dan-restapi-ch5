@@ -5,12 +5,13 @@ export type CarType = {
     name: string;
     price: number;
     image: string;
+    updated_at?: Date; 
 }
 
 export class CarModel extends Model {
     static tableName = 'cars';
 
     public static async create<Payload>(data: Payload & { image: string }): Promise<CarType & DateType> {
-        return super.insert<Payload, CarType>({...data})  
+        return super.insert<Payload, CarType>({...data})
     }
 }

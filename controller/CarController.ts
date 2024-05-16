@@ -72,7 +72,81 @@ export default class CarController {
                 }
             });
         } catch (error) {
-            return res.status(500).json({message: "Internal Server Error", error });
+            return res.status(500).json({ message: "Internal Server Error", error });
+        }
+    }
+
+    public static async update(req: Request, res: Response): Promise<Response> {
+        const { id } = req.params;
+        const { name, price }: { name: string, price: number } = req.body;
+        const file = req.file;
+
+        console.log("params", req.params);
+        console.log("body", req.body);
+        console.log("file", req.file);
+
+        try {
+            const car: CarType = await CarModel.findById(id);
+
+            if (!car) {
+                return res.status(404).json({ message: "Car not found" });
+            }
+            
+            let imageUrl: string | undefined;
+
+            if (file) {
+                imageUrl = await new Promise((resolve, reject) => {
+                    const uploadStream = cloudinary.uploader.upload_stream(
+                        { folder: 'cars' },
+                        (error, result) => {
+                            if (error) {
+                                reject(error);
+                            } else {
+                                resolve(result?.secure_url);
+                            }
+                        }
+                    );
+
+                    if (file.stream) {
+                        file.stream.pipe(uploadStream);
+                    } else if (file.buffer) {
+                        const stream = require('stream');
+                        const bufferStream = new stream.PassThrough();
+                        bufferStream.end(file.buffer);
+                        bufferStream.pipe(uploadStream);
+                    } else {
+                        reject(new Error("File upload error"));
+                    }
+                });
+            }
+
+            if (name) car.name = name;
+            if (price) car.price = price;
+            if (imageUrl) car.image = imageUrl;
+
+            car.updated_at = new Date();
+
+            console.log(car);
+            
+            return res.status(201).json({ message: "Car successfully updated", data: car });
+        } catch (error) {
+            return res.status(500).json({ message: "Internal Server Error", error });
+        }
+    }
+
+    public static async deleteCar(req: Request, res: Response): Promise<Response> {
+        const { id } = req.params;
+
+        try {
+            const deletedParams: number = await CarModel.delete(id);
+
+            if (deletedParams === 0) {
+                return res.status(404).json({ message: "Car not found" });
+            }
+
+            return res.status(201).json({ message: "Car successfully deleted"   });
+        } catch (error) {
+            return res.status(500).json({ message: "Internal Server Error", error });
         }
     }
 }
