@@ -5,12 +5,12 @@ import upload from '../middleware/multer';
 
 export const router = Router();
 
-router.get('/cars', (req: Request, res: Response) => {
-    CarController.getCars(req, res);
-});
-
 router.post('/cars', upload.single('image'), (req: Request, res: Response) => {
     CarController.store(req, res);
+});
+
+router.get('/cars', (req: Request, res: Response) => {
+    CarController.getCars(req, res);
 });
 
 router.put('/cars/:id', upload.single('image'), (req: Request, res: Response) => {

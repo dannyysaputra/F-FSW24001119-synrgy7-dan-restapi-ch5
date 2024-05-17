@@ -144,7 +144,7 @@ export default class CarController {
                 return res.status(404).json({ message: "Car not found" });
             }
 
-            return res.status(201).json({ message: "Car successfully deleted"   });
+            return res.status(201).json({ message: "Car successfully deleted" });
         } catch (error) {
             return res.status(500).json({ message: "Internal Server Error", error });
         }

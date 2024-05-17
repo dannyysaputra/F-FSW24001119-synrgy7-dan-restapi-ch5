@@ -13,7 +13,7 @@ export class Model {
 
     private static get table() {
         if (!this.tableName) {
-            throw new Error('You must provide a table name');   
+            throw new Error('Table must be specified');   
         }
 
         return database(this.tableName);
