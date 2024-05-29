@@ -1,4 +1,13 @@
 import Knex from 'knex';
+import { Model } from 'objection';
 import configs from '../knexfile';
 
-export const database = Knex(configs[process.env.NODE_ENV || 'development']);
+// inisialisasi knex
+const environment = process.env.NODE_ENV || 'development';
+const knexConfig = configs[environment];
+const knexInstance = Knex(knexConfig);
+
+// inisialisasi objection.js dengan knex
+Model.knex(knexInstance); 
+
+export default knexInstance;

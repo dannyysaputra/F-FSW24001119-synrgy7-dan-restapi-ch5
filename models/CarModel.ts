@@ -1,17 +1,19 @@
-import { DateType, Model } from "./Model";
+import BaseModel  from "./Model";
 
 export type CarType = {
     id: number;
     name: string;
     price: number;
     image: string;
-    updated_at?: Date; 
+    created_at: Date; 
+    updated_at: Date; 
 }
 
-export class CarModel extends Model {
+export class CarModel extends BaseModel {
     static tableName = 'cars';
 
-    public static async create<Payload>(data: Payload & { image: string }): Promise<CarType & DateType> {
-        return super.insert<Payload, CarType>({...data})
-    }
+    id!: number;
+    name!: string;
+    price!: number;
+    image!: string;
 }
